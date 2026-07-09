@@ -1,0 +1,29 @@
+# ori · igi — caching rules (Apache / LiteSpeed; ignored on other hosts)
+# Goal: browsers always re-check the HTML, so a new deploy shows up
+# immediately. CSS/JS are cache-busted via ?v=N in index.html, so they
+# can be cached hard and safely.
+
+<IfModule mod_headers.c>
+  # HTML: never trust a stale copy — always revalidate with the server
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+  </FilesMatch>
+
+  # Versioned static assets: safe to cache for a long time
+  <FilesMatch "\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Fallback expiry rules if mod_headers is unavailable but mod_expires is
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
