@@ -83,6 +83,7 @@
   const jumpMenu    = $('jumpMenu');
   const jumpItems   = $('jumpItems');
   const cartBtn     = $('cartBtn');
+  const cartCount   = $('cartCount');
   const basketPanel = $('basketPanel');
   const basketBody  = $('basketBody');
   const calcRoot    = $('calcRoot');
@@ -241,7 +242,8 @@
 
   /* --------------------------- basket panel ----------------------- */
   function renderBasket() {
-    cartBtn.textContent = 'BASKET · ' + state.basket.length;
+    if (cartCount) cartCount.textContent = state.basket.length;
+    cartBtn.classList.toggle('has-items', state.basket.length > 0);
     basketPanel.classList.toggle('is-open', state.basketOpen);
 
     if (!state.basket.length) {
@@ -377,7 +379,7 @@
           '<div class="contact-actions">' +
             '<a href="' + TEL_HREF + '">Make a call</a>' +
             (has
-              ? '<button type="button" id="waSendBtn">WhatsApp order</button>'
+              ? '<button type="button" id="waSendBtn">WhatsApp</button>'
               : '<a href="' + waLink("Hello ori · igi, I'd like to ask about your catering.") + '" target="_blank" rel="noopener">Chat on WhatsApp</a>') +
           '</div>' +
         '</div>' +

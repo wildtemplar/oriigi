@@ -119,12 +119,18 @@ img { display: block; max-width: 100%; }
 /* ---- basket button + panel ---- */
 .cart-wrap { position: relative; display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .cart-btn {
-  display: flex; align-items: center; height: 44px; padding: 0 18px;
+  display: flex; align-items: center; gap: 7px; height: 44px; padding: 0 15px;
   border-radius: 999px; border: 1px solid #C99B94; color: var(--oxblood);
-  font: 700 12px var(--mono); letter-spacing: .06em; cursor: pointer;
-  background: transparent; transition: background .2s ease;
+  cursor: pointer; background: transparent; transition: background .2s ease;
 }
 .cart-btn:hover { background: rgba(255,255,255,.4); }
+.cart-icon { width: 18px; height: 18px; display: block; }
+.cart-count { font: 700 12px var(--mono); min-width: 8px; text-align: center; line-height: 1; }
+.cart-btn.has-items .cart-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px;
+  background: var(--oxblood); color: var(--cream);
+}
 .basket-panel {
   display: none; position: absolute; top: 54px; right: 0; min-width: 300px;
   max-height: 360px; overflow-y: auto; background: #fff;
@@ -400,7 +406,7 @@ img { display: block; max-width: 100%; }
   flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   height: 46px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28);
   background: transparent; color: var(--cream-text); font: 600 12px var(--mono);
-  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  letter-spacing: .06em; text-transform: uppercase; cursor: pointer; white-space: nowrap;
 }
 .contact-actions a:hover,
 .contact-actions button:hover { color: var(--cream-text); background: rgba(255,255,255,.08); }
@@ -486,6 +492,13 @@ img { display: block; max-width: 100%; }
   .calc-side { width: 100%; }
   .plate-stage { width: min(64vw, 320px); height: min(58vh, 420px); }
   .vlabel { display: none; }
+}
+
+@media (max-width: 640px) {
+  /* On phones the plate is too narrow to hide the active dish's own
+     fanning arc-card, so it peeks out beside the plate and looks like a
+     duplicate. Hide the arc-cards; the plate still crossfades on scroll. */
+  .arc-card { display: none !important; }
 }
 
 @media (max-width: 560px) {
