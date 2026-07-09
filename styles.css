@@ -151,6 +151,15 @@ img { display: block; max-width: 100%; }
 .qval { font: 600 12px var(--mono); color: var(--muted); min-width: 70px; text-align: center; }
 .line-total { font: 600 12px var(--mono); color: var(--rose); }
 .basket-empty { padding: 22px 16px; font: 400 13px var(--sans); color: var(--muted-2); }
+.basket-foot { padding: 12px 16px 14px; position: sticky; bottom: 0; background: #fff; border-top: 1px solid var(--line); }
+.basket-book {
+  width: 100%; height: 44px; border: none; border-radius: 999px;
+  background: var(--oxblood); color: var(--cream);
+  font: 700 12px var(--mono); letter-spacing: .06em; text-transform: uppercase;
+  cursor: pointer; transition: opacity .2s ease;
+}
+.basket-book:hover { opacity: .9; }
+.basket-book:active { transform: translateY(1px); }
 
 /* =====================  HERO  ===================== */
 .hero-track { position: relative; height: 2600px; }
@@ -386,13 +395,15 @@ img { display: block; max-width: 100%; }
 }
 .book-btn:disabled { cursor: not-allowed; opacity: .5; }
 .contact-actions { display: flex; gap: 10px; }
-.contact-actions a {
+.contact-actions a,
+.contact-actions button {
   flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   height: 46px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28);
-  color: var(--cream-text); font: 600 12px var(--mono); letter-spacing: .06em;
-  text-transform: uppercase;
+  background: transparent; color: var(--cream-text); font: 600 12px var(--mono);
+  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
 }
-.contact-actions a:hover { color: var(--cream-text); background: rgba(255,255,255,.08); }
+.contact-actions a:hover,
+.contact-actions button:hover { color: var(--cream-text); background: rgba(255,255,255,.08); }
 
 /* ---- booking confirmation ---- */
 .booked {

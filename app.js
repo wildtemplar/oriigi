@@ -64,6 +64,7 @@
     openFaq: 0,
     serviceIncluded: false,
     booked: false,
+    bookedViaWhatsApp: false,
     contact: { name: '', phone: '', address: '', email: '' },
   };
 
@@ -262,7 +263,8 @@
           '<div class="line-total">' + naira(b.price * b.guests) + '</div>' +
         '</div>' +
       '</div>'
-    ).join('');
+    ).join('') +
+    '<div class="basket-foot"><button class="basket-book" data-act="book" type="button">Make a Booking</button></div>';
   }
   basketBody.addEventListener('click', (e) => {
     const t = e.target.closest('[data-act]'); if (!t) return;
@@ -270,11 +272,21 @@
     if (t.dataset.act === 'rm') removeItem(name);
     if (t.dataset.act === 'inc') incGuests(name);
     if (t.dataset.act === 'dec') decGuests(name);
+    if (t.dataset.act === 'book') goToEstimate();
   });
   cartBtn.addEventListener('click', () => {
     state.basketOpen = !state.basketOpen;
     basketPanel.classList.toggle('is-open', state.basketOpen);
   });
+
+  // Basket "Make a Booking" → close the basket and jump to the Volume Estimate
+  // section (the calculator already reflects the same basket, so it's pre-filled).
+  function goToEstimate() {
+    state.basketOpen = false;
+    basketPanel.classList.remove('is-open');
+    const est = document.getElementById('estimate');
+    if (est) est.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   /* ------------------------ volume calculator --------------------- */
   function renderCalc() {
@@ -282,20 +294,35 @@
     const { has, subtotal, delivery, service, est } = totals();
 
     if (state.booked) {
+      // adaptive confirmation copy
+      let bodyText;
+      if (c.name.trim()) {
+        bodyText = 'Thanks ' + esc(c.name) + ', we\'ve received your order' +
+          (c.phone.trim() ? ' and will reach out at ' + esc(c.phone) : '') +
+          (c.address.trim() ? ' to confirm delivery to ' + esc(c.address) : '') + '.';
+      } else {
+        bodyText = 'We\'ve received your order and will confirm the details with you shortly.';
+      }
+      if (state.bookedViaWhatsApp) bodyText += ' We\'ve also opened WhatsApp so you can send us a message directly.';
+
+      // only offer a WhatsApp copy if they booked WITHOUT it (avoids a duplicate log)
+      const waCopyBtn = state.bookedViaWhatsApp ? '' :
+        '<a class="btn btn-cream" href="' + waLink(buildOrderMessage()) + '" target="_blank" rel="noopener">Send a copy on WhatsApp</a>';
+
       calcRoot.innerHTML =
         '<div class="booked">' +
-          '<h3>Opening WhatsApp to confirm your order…</h3>' +
-          '<p>Send us the message we\'ve prepared and we\'ll reach out to ' + esc(c.name) + ' at ' + esc(c.phone) + ' to confirm delivery to ' + esc(c.address) + '. If WhatsApp didn\'t open, tap "Send on WhatsApp" below.</p>' +
+          '<h3>Booking received ✓</h3>' +
+          '<p>' + bodyText + '</p>' +
           '<div class="sum-lbl">ORDER SUMMARY</div>' +
           state.basket.map((b) => '<div class="sum-line"><span>' + b.name + ' — ' + b.guests + ' guests</span><span>' + naira(b.price * b.guests) + '</span></div>').join('') +
           '<div class="sum-total"><span>Total</span><span>' + naira(est) + '</span></div>' +
           '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
-            '<a class="btn btn-cream" id="resendWa" href="' + waLink(buildOrderMessage()) + '" target="_blank" rel="noopener">Send on WhatsApp</a>' +
+            waCopyBtn +
             '<button class="btn" id="resetBtn" style="background:transparent;color:var(--cream-text);border:1px solid rgba(255,255,255,.28)" type="button">Start a new order</button>' +
           '</div>' +
         '</div>';
       $('resetBtn').addEventListener('click', () => {
-        state.booked = false; state.basket = []; state.serviceIncluded = false;
+        state.booked = false; state.bookedViaWhatsApp = false; state.basket = []; state.serviceIncluded = false;
         state.contact = { name: '', phone: '', address: '', email: '' };
         renderBasket(); renderCalc();
       });
@@ -349,7 +376,9 @@
           '<button class="book-btn" id="bookBtn"' + (bookingReady() ? '' : ' disabled') + ' type="button">Make a Booking</button>' +
           '<div class="contact-actions">' +
             '<a href="' + TEL_HREF + '">Make a call</a>' +
-            '<a href="' + waLink("Hello ori · igi, I'd like to ask about your catering.") + '" target="_blank" rel="noopener">Chat on WhatsApp</a>' +
+            (has
+              ? '<button type="button" id="waSendBtn">WhatsApp order</button>'
+              : '<a href="' + waLink("Hello ori · igi, I'd like to ask about your catering.") + '" target="_blank" rel="noopener">Chat on WhatsApp</a>') +
           '</div>' +
         '</div>' +
       '</div>';
@@ -386,13 +415,24 @@
       });
     });
     const bookBtn = $('bookBtn');
-    if (bookBtn) bookBtn.addEventListener('click', () => {
-      if (!bookingReady()) return;
-      logBookingToSheet(buildBookingPayload());              // store the lead in Google Sheets
-      window.open(waLink(buildOrderMessage()), '_blank', 'noopener'); // pre-filled WhatsApp
-      state.booked = true; renderCalc();
-      calcRoot.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    if (bookBtn) bookBtn.addEventListener('click', () => submitBooking(false));
+    const waSendBtn = $('waSendBtn');
+    if (waSendBtn) waSendBtn.addEventListener('click', () => submitBooking(true));
+  }
+
+  // Single path for finalising an order.
+  //   viaWhatsApp = false → "Make a Booking": save to Sheets, show confirmation.
+  //   viaWhatsApp = true  → "Send order on WhatsApp": save to Sheets AND open WhatsApp.
+  // Either way the order is stored in Google Sheets.
+  function submitBooking(viaWhatsApp) {
+    if (!state.basket.length) return;                 // need at least one dish
+    if (!viaWhatsApp && !bookingReady()) return;      // a full booking needs complete contact details
+    logBookingToSheet(buildBookingPayload());          // always store the order
+    if (viaWhatsApp) window.open(waLink(buildOrderMessage()), '_blank', 'noopener');
+    state.booked = true;
+    state.bookedViaWhatsApp = viaWhatsApp;
+    renderCalc();
+    calcRoot.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   // Full-detail snapshot of the order for the Google Sheet.
