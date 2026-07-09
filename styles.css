@@ -117,7 +117,7 @@ img { display: block; max-width: 100%; }
 .jump-item:hover { background: var(--cream-hi); }
 
 /* ---- basket button + panel ---- */
-.cart-wrap { position: relative; display: flex; align-items: center; gap: 10px; }
+.cart-wrap { position: relative; display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .cart-btn {
   display: flex; align-items: center; height: 44px; padding: 0 18px;
   border-radius: 999px; border: 1px solid #C99B94; color: var(--oxblood);
@@ -496,4 +496,8 @@ img { display: block; max-width: 100%; }
   .footer-cols { gap: 32px; }
   .order-row { gap: 10px; }
   .oline { min-width: 78px; }
+  /* dropdown ~10% smaller + capped so it doesn't cover the screen */
+  .basket-panel { min-width: 270px; max-width: calc(100vw - 32px); max-height: 324px; }
+  .basket-row { padding: 11px 14px; }
+  .basket-head, .basket-foot { padding-left: 14px; padding-right: 14px; }
 }
