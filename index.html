@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ori · igi — Nigerian home cooking, catered by the tray</title>
+<meta name="description" content="Bulk Nigerian catering for weddings, corporate events and celebrations across Lagos. Build a menu, set your headcount, get an instant estimate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="screen" id="screen">
+
+  <!-- ============ PINNED SCROLL-MORPH HERO ============ -->
+  <div class="hero-track">
+    <div class="hero">
+      <div class="hero-glow" id="heroGlow"></div>
+      <div class="floor-vignette"></div>
+
+      <!-- nav -->
+      <nav class="nav">
+        <span class="brand">ori · igi</span>
+        <div class="nav-center">
+          <div class="tabwrap">
+            <div class="tabrail">
+              <div class="tab-caret" id="jumpCaret" title="Jump to section">▾</div>
+              <div id="tabs"></div>
+            </div>
+            <div class="jump-menu" id="jumpMenu">
+              <div class="jump-head">JUMP TO SECTION</div>
+              <div id="jumpItems"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cart-wrap">
+          <button class="cart-btn" id="cartBtn" type="button">BASKET · 0</button>
+          <div class="basket-panel" id="basketPanel">
+            <div class="basket-head">YOUR BASKET</div>
+            <div id="basketBody"></div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- progress -->
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+      <!-- vertical editorial label -->
+      <div class="vlabel">EVENT FOOD · COOKED FRESH</div>
+
+      <!-- kicker -->
+      <div class="kicker" id="kicker">◐&ensp;RICE</div>
+
+      <!-- big translucent heading -->
+      <div class="hero-ghost" id="heroGhost">Choose your rice</div>
+
+      <!-- arc cards (scroll behind the plate) -->
+      <div id="arcLayer"></div>
+
+      <!-- static plated hero (crossfades) -->
+      <div class="plate-stage" id="plateStage"></div>
+
+      <!-- index counter -->
+      <div class="idx-counter" id="idxCounter">01 / 07</div>
+
+      <!-- scroll hint -->
+      <div class="scroll-hint" id="scrollHint">
+        <div class="lbl">Scroll the menu</div>
+        <span class="tick"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee">
+    <div class="track">WEDDINGS&nbsp; · &nbsp;CORPORATE&nbsp; · &nbsp;BIRTHDAYS&nbsp; · &nbsp;NAMING CEREMONIES&nbsp; · &nbsp;CHURCH&nbsp; · &nbsp;HOME&nbsp; · &nbsp;WEDDINGS&nbsp; · &nbsp;CORPORATE&nbsp; · &nbsp;BIRTHDAYS&nbsp; · &nbsp;NAMING CEREMONIES&nbsp; · &nbsp;CHURCH&nbsp; · &nbsp;HOME&nbsp; · &nbsp;</div>
+  </div>
+
+  <!-- ============ THE SPREAD ============ -->
+  <section class="section section-cream" id="menu">
+    <div class="wrap">
+      <div class="spread-head">
+        <div>
+          <span class="eyebrow">The spread</span>
+          <div class="spread-title">The only 3 ways to fill the table.</div>
+        </div>
+        <button class="full-menu-link" type="button" id="fullMenuLink">Full menu →</button>
+      </div>
+      <div class="spread-grid">
+        <article class="spread-card">
+          <div class="spread-orb" style="background:radial-gradient(circle at 34% 30%,#F0A85A,#D2542A 55%,#8E2C16)"></div>
+          <div><h3>Rice</h3><p>Jollof, fried rice &amp; Ofada rice.</p><div class="spread-count">3 DISHES</div></div>
+        </article>
+        <article class="spread-card">
+          <div class="spread-orb" style="background:radial-gradient(circle at 34% 30%,#F6E6B0,#E4C878 55%,#B99A44)"></div>
+          <div><h3>Swallow</h3><p>Pounded yam, eba &amp; amala.</p><div class="spread-count">3 DISHES</div></div>
+        </article>
+        <article class="spread-card">
+          <div class="spread-orb" style="background:radial-gradient(circle at 34% 30%,#F0C070,#D18A3A 55%,#8E561E)"></div>
+          <div><h3>Small Chops</h3><p>Assorted small chops platter.</p><div class="spread-count">1 DISH</div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section section-hi" id="how">
+    <div class="wrap">
+      <span class="eyebrow how-eyebrow">How it works</span>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Build your menu</h3>
+          <p>Pick plates straight off the spread — mix rice, swallow and small chops however your guests eat.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Set your headcount</h3>
+          <p>Tell us how many you're feeding. We scale portions and quote a running estimate instantly, with no back-and-forth.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>We cook &amp; deliver</h3>
+          <p>Cooked the morning of, packed hot and delivered to your venue with warmers, servers and setup on request.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VOLUME CALCULATOR ============ -->
+  <section class="section section-dark" id="estimate">
+    <div class="wrap">
+      <span class="eyebrow on-dark calc-eyebrow">Volume estimate</span>
+      <div id="calcRoot"></div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section section-cream" id="faq">
+    <div class="wrap-narrow">
+      <span class="eyebrow faq-eyebrow">Questions</span>
+      <div id="faqRoot"></div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="name">ori · igi</div>
+        <p>Nigerian home cooking, catered by the tray. Lagos &amp; environs — book seven days ahead for large orders.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="h">Menu</span>
+          <a href="#menu">Rice</a>
+          <a href="#menu">Swallow</a>
+          <a href="#menu">Small Chops</a>
+        </div>
+        <div class="footer-col">
+          <span class="h">Company</span>
+          <a href="#menu">Occasions</a>
+          <a href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="footer-quote">
+        <span class="h">Get a quote</span>
+        <form class="quote-input" id="quoteForm">
+          <input type="email" placeholder="you@email.com" aria-label="Email for a quote" required>
+          <button class="btn btn-cream" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ori · igi</span>
+      <span>Cooked fresh · Delivered hot</span>
+    </div>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
