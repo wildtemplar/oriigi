@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "ori · igi — bulk-catering ordering site (static HTML/CSS/JS, no build step)",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
     "build": "echo \"Static site — no build step needed\"",
-    "start": "echo \"Static site — serve index.html at the repository root\""
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
   },
   "license": "UNLICENSED"
 }
